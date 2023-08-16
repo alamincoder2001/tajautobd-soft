@@ -271,7 +271,7 @@
     </div>
 
 
-    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+    <div class="col-xs-12 col-md-3 col-lg-3">
         <div class="widget-box">
             <div class="widget-header">
                 <h4 class="widget-title">Amount Details</h4>
@@ -289,15 +289,15 @@
             <div class="widget-body">
                 <div class="widget-main">
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-xs-12">
                             <div class="table-responsive">
                                 <table style="color:#000;margin-bottom: 0px;border-collapse: collapse;">
                                     <tr>
                                         <td>
                                             <div class="form-group">
-                                                <label class="col-sm-12 control-label no-padding-right">Sub
+                                                <label class="col-xs-12 control-label no-padding-right">Sub
                                                     Total</label>
-                                                <div class="col-sm-12">
+                                                <div class="col-xs-12">
                                                     <input type="number" id="subTotal" class="form-control" v-model="sales.subTotal" readonly />
                                                 </div>
                                             </div>

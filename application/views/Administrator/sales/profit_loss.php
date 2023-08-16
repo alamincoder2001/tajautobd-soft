@@ -96,10 +96,10 @@
 							<th>Product Id</th>
 							<th>Product</th>
 							<th>Sold Quantity</th>
-							<th>Purchase Rate</th>
-							<th>Purchased Total</th>
-							<th>Sold Amount</th>
-							<th>Profit/Loss</th>
+							<th style="text-align: right;">Actual Purchase Rate</th>
+							<th style="text-align: right;">Actual Purchased Total</th>
+							<th style="text-align: right;">Actual Sold Amount</th>
+							<th style="text-align: right;">Profit/Loss</th>
 						</tr>
 					</thead>
 					<tbody v-for="data in reportData" style="display:none;" v-bind:style="{display: reportData.length > 0 ? '' : 'none'}">
@@ -114,17 +114,17 @@
 						<tr v-for="product in data.saleDetails">
 							<td>{{ product.Product_Code }}</td>
 							<td>{{ product.Product_Name }}</td>
-							<td style="text-align:right;">{{ product.SaleDetails_TotalQuantity }}</td>
+							<td style="text-align:center;">{{ product.SaleDetails_TotalQuantity }}</td>
 							<td style="text-align:right;">{{ product.Product_APR > 0 ? product.Product_APR : product.Purchase_Rate }}</td>
 							<td style="text-align:right;">{{ product.purchased_amount }}</td>
 							<td style="text-align:right;">{{ product.SaleDetails_TotalAmount }}</td>
-							<td style="text-align:right;">{{ product.profit_loss }}</td>
+							<td style="text-align:right;">{{ parseFloat(product.profit_loss).toFixed(2) }}</td>
 						</tr>
 						<tr style="background-color: #f0f0f0;font-weight: bold;">
 							<td colspan="4" style="text-align:right;">Total</td>
-							<td style="text-align:right;">{{ data.saleDetails.reduce((prev, cur) => { return prev + parseFloat(cur.purchased_amount) }, 0) }}</td>
-							<td style="text-align:right;">{{ data.saleDetails.reduce((prev, cur) => { return prev + parseFloat(cur.SaleDetails_TotalAmount) }, 0) }}</td>
-							<td style="text-align:right;">{{ data.saleDetails.reduce((prev, cur) => { return prev + parseFloat(cur.profit_loss) }, 0) }}</td>
+							<td style="text-align:right;">{{ data.saleDetails.reduce((prev, cur) => { return prev + parseFloat(cur.purchased_amount) }, 0).toFixed(2) }}</td>
+							<td style="text-align:right;">{{ data.saleDetails.reduce((prev, cur) => { return prev + parseFloat(cur.SaleDetails_TotalAmount) }, 0).toFixed(2) }}</td>
+							<td style="text-align:right;">{{ data.saleDetails.reduce((prev, cur) => { return prev + parseFloat(cur.profit_loss) }, 0).toFixed(2) }}</td>
 						</tr>
 					</tbody>
 					<tfoot style="display:none;font-weight:bold;background-color:#e9dcdc;" v-bind:style="{display: reportData.length > 0 ? '' : 'none'}">
