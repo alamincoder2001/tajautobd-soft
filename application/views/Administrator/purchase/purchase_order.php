@@ -213,6 +213,12 @@
 						</tr>
 
 						<tr>
+                            <th colspan="4" style="text-align: right;">Total</th>
+                            <th>{{cart.reduce((prev, curr) => {return prev + parseFloat(curr.quantity)},0)}}</th>
+                            <th colspan="2"></th>
+                        </tr>
+
+						<tr>
 							<td colspan="7"></td>
 						</tr>
 

@@ -52,6 +52,14 @@ const quotationInvoice = Vue.component('quotation-invoice', {
                                     <td>{{ product.SaleDetails_TotalQuantity }}</td>
                                     <td align="right">{{ product.SaleDetails_TotalAmount }}</td>
                                 </tr>
+
+                                <tr>
+                                    <td colspan="3" style="text-align:right;">
+                                        Total
+                                    </td>
+                                    <td>{{ cart.reduce((prev, curr) => {return prev + parseFloat(curr.SaleDetails_TotalQuantity)},0) }}</td>
+                                    <td></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

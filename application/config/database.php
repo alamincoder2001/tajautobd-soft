@@ -8,15 +8,13 @@ $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 
-
-    'username' => 'root',
-  	'password' => '',
-  	'database' => 'taja4tobd_possoft',
-
-	// 'username' => 'taja4tobd_admin1',
+	'username' => 'root',
+	'password' => '',
+	'database' => 'taja4tobd_possoft',
+	
+    // 'username' => 'taja4tobd_admin1',
   	// 'password' => '5c4ebct1&dS^',
   	// 'database' => 'taja4tobd_possoft',
-
 		
 
 	'dbdriver' => 'mysqli',

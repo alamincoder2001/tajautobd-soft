@@ -53,6 +53,13 @@ const purchaseInvoice = Vue.component("purchase-invoice", {
                                     <td>{{ product.Product_APR }}</td>
                                     <td align="right">{{ product.PurchaseDetails_TotalAmount }}</td>
                                 </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align:right;">
+                                        Total
+                                    </td>
+                                    <td>{{ cart.reduce((prev, curr) => {return prev + parseFloat(curr.PurchaseDetails_TotalQuantity)},0) }}</td>
+                                    <td colspan="2"></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

@@ -49,6 +49,13 @@
                                     <td>{{ product.Product_Name }}</td>
                                     <td>{{ product.SaleDetails_TotalQuantity }} {{ product.Unit_Name }}</td>
                                 </tr>
+
+                                <tr>
+                                    <td colspan="2" style="text-align:right;">
+                                        Total
+                                    </td>
+                                    <td>{{ cart.reduce((prev, curr) => {return prev + parseFloat(curr.SaleDetails_TotalQuantity)},0) }}</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
