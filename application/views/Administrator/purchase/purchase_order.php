@@ -151,10 +151,15 @@
 									</div>
 								</div>
 
-								<div class="form-group" style="display:none;">
-									<label class="col-sm-4 control-label no-padding-right"> Cost </label>
-									<div class="col-sm-3">
-										<input type="text" id="cost" name="cost" class="form-control" placeholder="Cost" readonly />
+								<div class="form-group">
+									<label class="col-xs-4 control-label no-padding-right">Purchase in</label>
+									<div class="col-xs-3">
+										<input type="text" placeholder="%" class="form-control" v-model="selectedProduct.purchaseIn" @input="calculatePurchasePrice" id="purchase_in_p" />
+									</div>
+									<label class="col-xs-1 control-label no-padding-left">(%) </label>
+									<label class="col-xs-1 control-label no-padding">Price </label>
+									<div class="col-xs-3">
+										<input type="text" placeholder="Price" class="form-control" v-model="selectedProduct.purchaseRate" @input="calculatePurchaseIn" />
 									</div>
 								</div>
 
@@ -195,7 +200,8 @@
 							<th style="width:4%;color:#000;">SL</th>
 							<th style="width:20%;color:#000;">Product Name</th>
 							<th style="width:13%;color:#000;">Category</th>
-							<th style="width:8%;color:#000;">Purchase Rate</th>
+							<th style="width:8%;color:#000;">Rate</th>
+							<th style="width:8%;color:#000;">PurchaseIn</th>
 							<th style="width:5%;color:#000;">Quantity</th>
 							<th style="width:13%;color:#000;">Total Amount</th>
 							<th style="width:20%;color:#000;">Action</th>
@@ -206,29 +212,30 @@
 							<td>{{ sl + 1 }}</td>
 							<td>{{ product.name }}</td>
 							<td>{{ product.categoryName }}</td>
-							<td>{{ product.Product_APR }}</td>
+							<td>{{ product.purchaseRate }}</td>
+							<td>{{ product.purchaseInPercent }} %</td>
 							<td>{{ product.quantity }}</td>
 							<td>{{ product.total }}</td>
 							<td><a href="" v-on:click.prevent="removeFromCart(sl)"><i class="fa fa-trash"></i></a></td>
 						</tr>
 
 						<tr>
-                            <th colspan="4" style="text-align: right;">Total</th>
-                            <th>{{cart.reduce((prev, curr) => {return prev + parseFloat(curr.quantity)},0)}}</th>
-                            <th colspan="2"></th>
-                        </tr>
+							<th colspan="5" style="text-align: right;">Total</th>
+							<th>{{cart.reduce((prev, curr) => {return prev + parseFloat(curr.quantity)},0)}}</th>
+							<th colspan="2"></th>
+						</tr>
 
 						<tr>
-							<td colspan="7"></td>
+							<td colspan="8"></td>
 						</tr>
 
 						<tr style="font-weight: bold;">
-							<td colspan="4">Note</td>
+							<td colspan="5">Note</td>
 							<td colspan="3">Sub Total</td>
 						</tr>
 
 						<tr>
-							<td colspan="4"><textarea style="width: 100%;font-size:13px;" placeholder="Note" v-model="purchase.note"></textarea></td>
+							<td colspan="5"><textarea style="width: 100%;font-size:13px;" placeholder="Note" v-model="purchase.note"></textarea></td>
 							<td colspan="3" style="padding-top: 15px;font-size:18px;">{{ purchase.subTotal }}</td>
 						</tr>
 					</tbody>
@@ -519,8 +526,30 @@
 				// this.$refs.quantity.focus();
 			},
 			productTotal() {
-				this.selectedProduct.total = this.selectedProduct.quantity * this.selectedProduct
-					.A_Product_Purchase_Rate;
+				if (this.selectedProduct.purchaseRate == undefined) {
+					this.selectedProduct.purchaseRate = this.selectedProduct.A_Product_Purchase_Rate;
+				}
+				this.selectedProduct.total = (parseFloat(this.selectedProduct.quantity) * parseFloat(this
+					.selectedProduct.purchaseRate)).toFixed(2);
+			},
+			calculatePurchasePrice() {
+				let amount = (this.selectedProduct.A_Product_Purchase_Rate * this.selectedProduct.purchaseIn / 100)
+					.toFixed(2);
+				this.selectedProduct.purchaseRate = (parseFloat(this.selectedProduct.A_Product_Purchase_Rate) +
+					parseFloat(amount)).toFixed(2);
+				this.selectedProduct.total = (this.selectedProduct.purchaseRate * this.selectedProduct.quantity)
+					.toFixed(2);
+			},
+			calculatePurchaseIn() {
+				let commisionPrice = (parseFloat(this.selectedProduct.purchaseRate) - parseFloat(this
+					.selectedProduct.A_Product_Purchase_Rate)).toFixed(2)
+
+				this.selectedProduct.purchaseIn = 100 / parseFloat(this.selectedProduct.A_Product_Purchase_Rate) * parseFloat(commisionPrice).toFixed(2);
+
+				$("#purchase_in_p").val(parseFloat(this.selectedProduct.purchaseIn).toFixed(2));
+				this.selectedProduct.total = (this.selectedProduct.purchaseRate * this.selectedProduct.quantity)
+					.toFixed(2);
+				$("#productTotal").val(this.selectedProduct.total);
 			},
 			addToCart() {
 				let cartInd = this.cart.findIndex(p => p.productId == this.selectedProduct.Product_SlNo);
@@ -534,16 +563,24 @@
 					name: this.selectedProduct.Product_Name,
 					categoryId: this.selectedProduct.ProductCategory_ID,
 					categoryName: this.selectedProduct.ProductCategory_Name,
-					purchaseRate: this.selectedProduct.Product_Purchase_Rate,
+					purchaseRate: this.selectedProduct.purchaseRate,
 					Product_APR: this.selectedProduct.A_Product_Purchase_Rate,
 					salesRate: this.selectedProduct.Product_SellingPrice,
 					quantity: this.selectedProduct.quantity,
-					total: this.selectedProduct.total
+					total: this.selectedProduct.total,
+					purchaseIn: this.selectedProduct.purchaseIn,
+					purchaseInPercent: this.selectedProduct.purchaseIn,
+					purchaseInTaka: parseFloat(+this.selectedProduct.total - (+this.selectedProduct.A_Product_Purchase_Rate * +this.selectedProduct.quantity)).toFixed(2),
 				}
 				if (product.productId == '') {
 					document.querySelector('#product input[role="combobox"]').focus();
 					return;
 				}
+
+				if (this.selectedProduct.purchaseIn == undefined || this.selectedProduct.purchaseIn == '') {
+                    document.querySelector('#purchase_in_p').focus();
+                    return;
+                }
 
 				if (product.purchaseRate == '') {
 					alert('Product purchase rate is empty!');
@@ -705,7 +742,9 @@
 							Product_APR: product.Product_APR,
 							salesRate: product.Product_SellingPrice,
 							quantity: product.PurchaseDetails_TotalQuantity,
-							total: product.PurchaseDetails_TotalAmount
+							total: product.PurchaseDetails_TotalAmount,
+							purchaseInPercent: parseFloat(100 / product.Product_APR * (+product.PurchaseDetails_Rate - product.Product_APR)).toFixed(2),
+                            purchaseInTaka: parseFloat(+product.PurchaseDetails_Rate - (+product.Product_APR * +product.PurchaseDetails_TotalQuantity)).toFixed(2),
 						}
 
 						this.cart.push(cartProduct);

@@ -111,7 +111,7 @@ class Sales extends CI_Controller
                 'SaleMaster_TaxAmount' => $data->sales->vat,
                 'SaleMaster_Freight' => $data->sales->transportCost,
                 'SaleMaster_SubTotalAmount' => $data->sales->subTotal,
-                'SaleMaster_PaidAmount' => $data->sales->paid > $data->sales->subTotal ? $data->sales->subTotal : $data->sales->paid,
+                'SaleMaster_PaidAmount' => $data->sales->paid,
                 'returnAmount' => $data->sales->returnAmount,
                 'SaleMaster_DueAmount' => $data->sales->due,
                 'SaleMaster_Previous_Due' => $data->sales->previousDue,
@@ -129,20 +129,20 @@ class Sales extends CI_Controller
 
             foreach ($data->cart as $cartProduct) {
                 $saleDetails = array(
-                    'SaleMaster_IDNo' => $salesId,
-                    'Product_IDNo' => $cartProduct->productId,
+                    'SaleMaster_IDNo'           => $salesId,
+                    'Product_IDNo'              => $cartProduct->productId,
                     'SaleDetails_TotalQuantity' => $cartProduct->quantity,
-                    'Purchase_Rate' => $cartProduct->purchaseRate,
-                    'Product_APR' => $cartProduct->Product_APR,
-                    'Product_ASR' => $cartProduct->Product_ASR,
-                    'SaleDetails_Rate' => $cartProduct->salesRate,
-                    'SaleDetails_Tax' => $cartProduct->vat,
-                    'SaleDetails_TotalAmount' => $cartProduct->total,
-                    'SaleDetails_ic_rate' => $cartProduct->ic_rate,
-                    'Status' => 'a',
-                    'AddBy' => $this->session->userdata("FullName"),
-                    'AddTime' => date('Y-m-d H:i:s'),
-                    'SaleDetails_BranchId' => $this->session->userdata('BRANCHid')
+                    'Purchase_Rate'             => $cartProduct->purchaseRate,
+                    'Product_APR'               => $cartProduct->Product_APR,
+                    'Product_ASR'               => $cartProduct->Product_ASR,
+                    'SaleDetails_Rate'          => $cartProduct->salesRate,
+                    'SaleDetails_Tax'           => $cartProduct->vat,
+                    'SaleDetails_TotalAmount'   => $cartProduct->total,
+                    'SaleDetails_ic_rate'       => $cartProduct->ic_rate,
+                    'Status'                    => 'a',
+                    'AddBy'                     => $this->session->userdata("FullName"),
+                    'AddTime'                   => date('Y-m-d H:i:s'),
+                    'SaleDetails_BranchId'      => $this->session->userdata('BRANCHid')
                 );
 
                 $this->db->insert('tbl_saledetails', $saleDetails);

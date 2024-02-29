@@ -778,15 +778,9 @@
                     .selectedProduct.A_Product_SellingPrice) * parseFloat(commisionPrice).toFixed(2);
 
                 $("#sale_in_p").val(parseFloat(this.selectedProduct.saleIn).toFixed(2));
-
-                // this.selectedProduct.saleIn = (parseFloat(this.selectedProduct.salesPrice) / parseFloat(this
-                //     .selectedProduct.Product_SellingPrice)).toFixed(2);
-
                 this.selectedProduct.total = (this.selectedProduct.salesPrice * this.selectedProduct.quantity)
                     .toFixed(2);
                 $("#productTotal").val(this.selectedProduct.total);
-
-
             },
 
             calculateTotal() {
@@ -807,13 +801,12 @@
                     .sales.transportCost)) - parseFloat(this.sales.discount)).toFixed(2);
 
                 if (this.selectedCustomer.Customer_Type == 'G') {
-                    this.sales.paid = Math.round(this.sales.total).toFixed(2);
+                    this.sales.paid = parseFloat(Math.round(this.sales.total)).toFixed(2);
                     this.sales.due = 0;
                 } else {
                     if (event.target.id != 'paid') {
                         this.sales.paid = 0;
                     }
-                    // this.sales.due = (parseFloat(this.sales.total) - parseFloat(this.sales.paid)).toFixed(2);
                     if (parseFloat(this.sales.paid) > parseFloat(this.sales.total)) {
                         this.sales.due = 0.00;
                     } else {
