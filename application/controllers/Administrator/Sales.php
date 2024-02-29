@@ -1847,15 +1847,26 @@ class Sales extends CI_Controller
                     sd.*,
                     p.Product_Code,
                     p.Product_Name,
-                    ( CASE 
-                    WHEN sd.Product_APR > 0 THEN sd.Product_APR
-                    ELSE sd.Purchase_Rate
-                    END * sd.SaleDetails_TotalQuantity) as purchased_amount,
+                    p.A_Product_Purchase_Rate as purchased_amount,
                     (select sd.SaleDetails_TotalAmount - purchased_amount) as profit_loss
                 from tbl_saledetails sd 
                 join tbl_product p on p.Product_SlNo = sd.Product_IDNo
                 where sd.SaleMaster_IDNo = ?
             ", $sale->SaleMaster_SlNo)->result();
+            // $sale->saleDetails = $this->db->query("
+            //     select
+            //         sd.*,
+            //         p.Product_Code,
+            //         p.Product_Name,
+            //         ( CASE 
+            //         WHEN sd.Product_APR > 0 THEN sd.Product_APR
+            //         ELSE sd.Purchase_Rate
+            //         END * sd.SaleDetails_TotalQuantity) as purchased_amount,
+            //         (select sd.SaleDetails_TotalAmount - purchased_amount) as profit_loss
+            //     from tbl_saledetails sd 
+            //     join tbl_product p on p.Product_SlNo = sd.Product_IDNo
+            //     where sd.SaleMaster_IDNo = ?
+            // ", $sale->SaleMaster_SlNo)->result();
         }
 
         echo json_encode($sales);
